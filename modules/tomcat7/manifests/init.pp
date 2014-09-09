@@ -39,14 +39,19 @@ class tomcat7 {
     path    => ['/bin'],
   }
 
+  file { '/var/lib/tomcat7/webapps/traceability.war':
+    source  => '/tmp/traceability.war',
+    before  => Exec['delete-war-from-tmp'],
+    require => [
+      Exec['delete-war-from-webapps'],
+      Exec['sample-war'],
+    ],
+  }
+
   exec { 'delete-war-from-tmp':
     command => 'rm /tmp/traceability.war',
     path    => ['/bin'],
   }
 
-  file { '/var/lib/tomcat7/webapps/traceability.war':
-    source  => '/tmp/traceability.war',
-    require => Exec['sample-war', 'delete-war-from-webapps'],
-  }
 
 }
